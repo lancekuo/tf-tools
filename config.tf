@@ -14,8 +14,8 @@ resource "null_resource" "ssh_trigger" {
     }
 
     provisioner "local-exec" {
-        command = "echo <<EOF > test.sh
-$${data.template_file.script.rendered}
+        command = "cat <<EOF > test.sh
+${data.template_file.script.rendered}
 EOF
 "
     }
