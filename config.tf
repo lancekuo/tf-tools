@@ -14,9 +14,7 @@ resource "null_resource" "ssh_trigger" {
     }
 
     provisioner "local-exec" {
-        command = "echo <<EOF '${data.template_file.script.rendered}'
-EOF
-> test.sh"
+        command = "${format("cat <<\"EOF\" > \"%s\"\n%s\nEOF", "test.sh", data.template_file.script.rendered)}"
     }
 }
 
