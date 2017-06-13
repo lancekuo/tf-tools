@@ -43,7 +43,7 @@ end
 
 system("aws --region ${region} s3 cp s3://${bucket_name}/env:/${env_name}/${filename} "+ File.dirname(__FILE__))
 
-file = File.read(File.dirname(__FILE__)+'/${filename}')
+file = File.read(File.dirname(__FILE__) + "/${filename}")
 data_hash = JSON.parse(file)
 
 hosts = {}
@@ -73,7 +73,7 @@ resources.each do |key, resource|
     eip = attributes['public_ip']
   end
 end
-bastion_path = pathname+'/keys/bastion'
+bastion_path = pathname+'/bastion'
 bastion[bastion_name] = {
     :hostname => eip,
     :user     => 'ubuntu',
@@ -90,9 +90,9 @@ resources.each do |key, resource|
     if !name.index('bastion')
 
       user = 'ubuntu'
-      node_path = pathname+'/keys/node'
+      node_path = pathname+'/node'
       if name.index('manager')
-        node_path = pathname+'/keys/manager'
+        node_path = pathname+'/manager'
       end
       hosts[name] = {
         :hostname => hostname,
