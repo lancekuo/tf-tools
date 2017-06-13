@@ -52,7 +52,7 @@ bastion_name = ""
 eip = ""
 resources = {}
 
-pathname = File.expand_path(File.dirname(__FILE__))+'/../..'
+pathname = File.expand_path(File.dirname(__FILE__))
 
 data_hash['modules'].each do |i|
     if i['resources'].empty? == false
