@@ -4,7 +4,7 @@ data "template_file" "script" {
     vars {
         region = "${var.s3-region}"
         bucket_name = "${var.bucket_name}"
-        env_name = "${terraform.env}"
+        env_name = "${terraform.workspace}"
         filename = "${var.filename}"
     }
 }
@@ -14,7 +14,7 @@ resource "null_resource" "ssh_trigger" {
     }
 
     provisioner "local-exec" {
-        command = "${format("cat <<\"EOF\" > \"%s\"\n%s\nEOF", "${path.root}/keys/ssh_config_${var.project}-${terraform.env}.rb", data.template_file.script.rendered)}"
+        command = "${format("cat <<\"EOF\" > \"%s\"\n%s\nEOF", "${path.root}/keys/ssh_config_${var.project}-${terraform.workspace}.rb", data.template_file.script.rendered)}"
     }
 }
 
