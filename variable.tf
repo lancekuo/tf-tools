@@ -5,3 +5,4 @@ variable "node_list"         {}
 variable "project"           {}
 variable "region"            {}
 variable "enable_s3_backend" {}
+variable "isIBM"             {}
