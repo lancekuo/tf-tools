@@ -1,16 +1,16 @@
 data "template_file" "script_s3" {
-    count = "${var.enable_s3_backend}"
+    count    = "${var.enable_s3_backend}"
     template = "${file("${path.module}/template/ssh_config_s3.rb")}"
 
     vars {
-        region = "${var.s3-region}"
+        region      = "${var.s3-region}"
         bucket_name = "${var.bucket_name}"
-        env_name = "${terraform.workspace}"
-        filename = "${var.filename}"
+        env_name    = "${terraform.workspace}"
+        filename    = "${var.filename}"
     }
 }
 data "template_file" "script" {
-    count = "${1-var.enable_s3_backend}"
+    count    = "${1-var.enable_s3_backend}"
     template = "${file("${path.module}/template/ssh_config.rb")}"
 
     vars {
@@ -19,14 +19,15 @@ data "template_file" "script" {
     }
 }
 data "template_file" "script_ibm" {
-    count = "${var.isIBM}"
+    count    = "${var.isIBM}"
     template = "${file("${path.module}/template/ssh_config_ibm.rb")}"
 
     vars {
-        env_name = "${terraform.workspace}"
-        filename = "${var.filename}"
-        s3_enabled = "false"
-        region = ""
+        env_name    = "${terraform.workspace}"
+        project     = "${var.project}"
+        filename    = "${var.filename}"
+        s3_enabled  = "false"
+        region      = ""
         bucket_name = ""
     }
 }

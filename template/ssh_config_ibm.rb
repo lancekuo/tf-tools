@@ -50,11 +50,10 @@ end
 file = File.read(File.dirname(__FILE__) + "/${filename}")
 data_hash = JSON.parse(file)
 
-hosts = {}
-bastion = {}
-bastion_name = ""
-eip = ""
-resources = {}
+hosts        = {}
+bastion      = {}
+eip          = ""
+resources    = {}
 
 pathname = File.expand_path(File.dirname(__FILE__))
 
@@ -68,18 +67,17 @@ resources.each do |key, resource|
   if ['ibm_compute_vm_instance'].include?(resource['type'])
     attributes = resource['primary']['attributes']
     name = attributes['hostname'].downcase
-    if name.index('bastion')
-      bastion_name = name
+    if name.index('bastion') || name.index('nat')
       eip = attributes['ipv4_address']
+      bastion_path = pathname+'/bastion'
+      bastion[name] = {
+          :hostname => eip,
+          :user     => 'root',
+          :path     => bastion_path,
+      }
     end
   end
 end
-bastion_path = pathname+'/bastion'
-bastion[bastion_name] = {
-    :hostname => eip,
-    :user     => 'root',
-    :path     => bastion_path,
-}
 renderer = ERB.new(get_template)
 puts renderer.result(SshConfig.new(bastion).get_binding)
 
@@ -88,7 +86,7 @@ resources.each do |key, resource|
     attributes = resource['primary']['attributes']
     name = attributes['hostname'].downcase
     hostname = attributes['ipv4_address_private']
-    if !name.index('bastion')
+    if !name.index('bastion') && !name.index('nat')
 
       user = 'root'
       node_path = pathname+'/node'
@@ -98,7 +96,7 @@ resources.each do |key, resource|
       hosts[name] = {
         :hostname => hostname,
         :user => user,
-        :bastion_name => bastion_name,
+        :bastion_name => "bastion",
         :path => node_path,
       }
     end
@@ -106,5 +104,5 @@ resources.each do |key, resource|
 end
 renderer2 = ERB.new(get_template_bastion)
 puts renderer2.result(SshConfig.new(hosts).get_binding)
-File.write(File.expand_path('~')+'/.ssh/config.d/'+bastion_name[0..bastion_name.index('bastion')-2], renderer.result(SshConfig.new(bastion).get_binding)+renderer2.result(SshConfig.new(hosts).get_binding))
+File.write(File.expand_path('~')+"/.ssh/config.d/${project}.${env_name}", renderer.result(SshConfig.new(bastion).get_binding)+renderer2.result(SshConfig.new(hosts).get_binding))
 system('cat '+File.expand_path('~')+'/.ssh/config.d/* > '+File.expand_path('~')+'/.ssh/config')
