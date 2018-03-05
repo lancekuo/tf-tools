@@ -67,7 +67,7 @@ resources.each do |key, resource|
   if ['ibm_compute_vm_instance'].include?(resource['type'])
     attributes = resource['primary']['attributes']
     name = attributes['hostname'].downcase
-    if name.index('bastion') || name.index('nat')
+    if name.index('bastion')
       eip = attributes['ipv4_address']
       bastion_path = pathname+'/bastion'
       bastion[name] = {
@@ -86,12 +86,15 @@ resources.each do |key, resource|
     attributes = resource['primary']['attributes']
     name = attributes['hostname'].downcase
     hostname = attributes['ipv4_address_private']
-    if !name.index('bastion') && !name.index('nat')
+    if !name.index('bastion')
 
       user = 'root'
       node_path = pathname+'/node'
       if name.index('manager')
         node_path = pathname+'/manager'
+      end
+      if name.index('nat')
+        node_path = pathname+'/nat'
       end
       hosts[name] = {
         :hostname => hostname,
