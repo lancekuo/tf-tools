@@ -66,7 +66,7 @@ end
 resources.each do |key, resource|
   if ['ibm_compute_vm_instance'].include?(resource['type'])
     attributes = resource['primary']['attributes']
-    name = attributes['hostname'].downcase + ".${project}." + attributes['domain'].downcase
+    name = attributes['hostname'].downcase + "." + attributes['domain'].downcase
     if name.index('bastion')
       eip = attributes['ipv4_address']
       bastion_path = pathname+'/bastion'
@@ -84,7 +84,7 @@ puts renderer.result(SshConfig.new(bastion).get_binding)
 resources.each do |key, resource|
   if ['ibm_compute_vm_instance'].include?(resource['type'])
     attributes = resource['primary']['attributes']
-    name = attributes['hostname'].downcase + ".${project}." + attributes['domain'].downcase
+    name = attributes['hostname'].downcase + "." + attributes['domain'].downcase
     hostname = attributes['ipv4_address_private']
     if !name.index('bastion')
 
