@@ -54,6 +54,7 @@ hosts        = {}
 bastion      = {}
 eip          = ""
 resources    = {}
+bastion_name = ""
 
 pathname = File.expand_path(File.dirname(__FILE__))
 
@@ -68,6 +69,7 @@ resources.each do |key, resource|
     attributes = resource['primary']['attributes']
     name = attributes['hostname'].downcase + "." + attributes['domain'].downcase
     if name.index('bastion')
+      bastion_name = name
       eip = attributes['ipv4_address']
       bastion_path = pathname+'/bastion'
       bastion[name] = {
@@ -99,7 +101,7 @@ resources.each do |key, resource|
       hosts[name] = {
         :hostname => hostname,
         :user => user,
-        :bastion_name => "bastion",
+        :bastion_name => bastion_name,
         :path => node_path,
       }
     end
