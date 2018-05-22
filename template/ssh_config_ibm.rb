@@ -74,7 +74,7 @@ resources.each do |key, resource|
       bastion_path = pathname+'/bastion'
       bastion[name] = {
           :hostname => eip,
-          :user     => 'root',
+          :user     => 'ubuntu',
           :path     => bastion_path,
       }
     end
@@ -90,7 +90,7 @@ resources.each do |key, resource|
     hostname = attributes['ipv4_address_private']
     if !name.index('bastion')
 
-      user = 'root'
+      user = 'ubuntu'
       node_path = pathname+'/node'
       if name.index('manager')
         node_path = pathname+'/manager'
