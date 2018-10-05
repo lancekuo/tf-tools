@@ -1,7 +1,6 @@
-variable "s3-region"         {}
-variable "bucket_name"       {}
-variable "filename"          {}
+variable "s3_region"         {}
+variable "s3_bucket_name"    {}
+variable "s3_tf_filename"    {}
 variable "node_list"         {}
 variable "project"           {}
-variable "region"            {}
-variable "enable_s3_backend" {}
+variable "enableS3Backend"   {}
